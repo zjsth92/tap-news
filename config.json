@@ -1,0 +1,61 @@
+{
+    "host": "localhost",
+    "port": 4040,
+    "news_timeout": 86400,
+    "sleepTime": 10,
+    "mongodb": {
+        "host": "localhost",
+        "port": 27017,
+        "db_name":"tap-news-sth",
+        "news_table": "news",
+        "click_log_table": "click_logs"
+    },
+    "redis": {
+        "host": "localhost",
+        "port": 6379
+    },
+    "amqp": {
+        "socket_timeout": 3,
+        "dedupe": {
+            "name": "CS503_DEDUPE",
+            "url": "amqp://kjnurehe:qSy14EEtFAJHxN1vMdPQ6hTHMBjqxNkv@donkey.rmq.cloudamqp.com/kjnurehe"
+        },
+        "scrape": {
+            "name": "CS503_SCRAPE_NEWS",
+            "url": "amqp://gxjrsdiw:dyQFtjnT6xVvO1FkhDgw4q9WyQoVt6rw@donkey.rmq.cloudamqp.com/gxjrsdiw"
+        },
+        "log_click": {
+            "name": "CS503_LOG_CLICKS",
+            "url": "amqp://ftroegur:0r2CWAU1Np35jd6Fs3dO4yJRbSemNlAN@crocodile.rmq.cloudamqp.com/ftroegur"
+        }
+    },
+    "jwtSecret": "a secret phrase!!",
+    "newsApi": {
+        "sources": [
+            "bbc-news",
+            "bbc-sport",
+            "bloomberg",
+            "cnn",
+            "entertainment-weekly",
+            "espn",
+            "ign",
+            "techcrunch",
+            "the-new-york-times",
+            "the-wall-street-journal",
+            "the-washington-post"
+        ],
+        "endpoint": "https://newsapi.org/v1/",
+        "key": "db427890f16c447f8d95182a2db5d3f4"
+    },
+    "topic_modeling_service": {
+        "host": "localhost",
+        "port": 6060,
+        "max_doc_len": 500,
+        "model_update_lag": 10
+    },
+    "recommendation_service": {
+        "host": "localhost",
+        "port": 5050,
+        "preference_model_table":"user_preference_model"
+    }
+}
