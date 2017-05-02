@@ -4,14 +4,14 @@
     "news_timeout": 86400,
     "sleepTime": 10,
     "mongodb": {
-        "host": "localhost",
+        "host": "0.0.0.0",
         "port": 27017,
         "db_name":"tap-news-sth",
         "news_table": "news",
         "click_log_table": "click_logs"
     },
     "redis": {
-        "host": "localhost",
+        "host": "0.0.0.0",
         "port": 6379
     },
     "amqp": {

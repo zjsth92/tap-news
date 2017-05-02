@@ -1,0 +1,25 @@
+backend_server:
+web_server:
+news_pipeline:
+news_recommendation_service:
+news_topic_modeling_service:
+mongodb:
+  host:  "0.0.0.0"
+  port: ${MONGODB_PORT:27017}
+  db_name: tap-news-sth
+  news_table: news
+  click_log_table: click_logs
+redis:
+  host: '0.0.0.0'
+  port: 6379
+amqp:
+  socket_timeout: 3
+  dedupe:
+    name: CS503_DEDUPE
+    url: amqp://kjnurehe:qSy14EEtFAJHxN1vMdPQ6hTHMBjqxNkv@donkey.rmq.cloudamqp.com/kjnurehe
+  scrape:
+    name: CS503_SCRAPE_NEWS
+    url: amqp://gxjrsdiw:dyQFtjnT6xVvO1FkhDgw4q9WyQoVt6rw@donkey.rmq.cloudamqp.com/gxjrsdiw
+  log_click:
+    name: CS503_LOG_CLICKS
+    url: amqp://ftroegur:0r2CWAU1Np35jd6Fs3dO4yJRbSemNlAN@crocodile.rmq.cloudamqp.com/ftroegur
