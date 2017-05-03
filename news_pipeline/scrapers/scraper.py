@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
+
 import os
 import random
 import requests
-
+import yaml
 from lxml import html
 
-GET_CNN_NEWS_XPATH = '''//p[@class="zn-body__paragraph"]//text() | //div[@class="zn-body__paragraph"]//text()'''
+with open(os.path.join(os.path.dirname(__file__), "config.yaml"), 'r') as stream:
+    config = yaml.load(stream)["scraper"]
 
 # Load user agents
 USER_AGENTS_FILE = os.path.join(os.path.dirname(__file__), 'user_agents.txt')
@@ -24,7 +27,7 @@ def getHeaders():
     }
     return headers
 
-def extract_news(news_url):
+def extract_news(news_url, source):
     # Fetch html
     session_requests = requests.session()
     response = session_requests.get(news_url, headers=getHeaders())
@@ -34,11 +37,13 @@ def extract_news(news_url):
     try:
         # Parse html
         tree = html.fromstring(response.content)
+
         # Extract information
-        news = tree.xpath(GET_CNN_NEWS_XPATH)
+        xpath = config[source]["xpath"]
+        news = tree.xpath(xpath)
         news = ''.join(news)
     except Exception as e:
-        print # coding=utf-8
+        print e
         return {}
 
     return news

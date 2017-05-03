@@ -34,7 +34,16 @@ USER_NEWS_TIME_OUT_IN_SECONDS = 60
 LOG_CLICKS_TASK_QUEUE_URL = config["amqp"]["log_click"]["url"]
 LOG_CLICKS_TASK_QUEUE_NAME = config["amqp"]["log_click"]["name"]
 
+print 'operations.py try to connect redis at %s:%d' % (REDIS_HOST, REDIS_PORT)
 redis_client = redis.StrictRedis(REDIS_HOST, REDIS_PORT, db=0)
+try:
+    redis_client.get(None)  # getting None returns None or throws an exception
+except (redis.exceptions.ConnectionError, 
+        redis.exceptions.BusyLoadingError):
+    print 'operations.py redis connection Failed'
+    exit(1)
+print 'operations.py redis connection success'
+
 cloudAMQP_client = CloudAMQPClient(LOG_CLICKS_TASK_QUEUE_URL, LOG_CLICKS_TASK_QUEUE_NAME)
 
 def getNewsSummariesForUser(user_id, page_num):

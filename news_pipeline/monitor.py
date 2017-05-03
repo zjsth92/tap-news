@@ -27,7 +27,17 @@ SCRAPE_NEWS_TASK_QUEUE_NAME = config["amqp"]["scrape"]["name"]
 
 NEWS_SOURCES = [source.encode('ascii') for source in config["newsApi"]["sources"]]
 
+print 'monitor.py try to connect redis at %s:%d' % (REDIS_HOST, REDIS_PORT)
 redis_client = redis.StrictRedis(REDIS_HOST, REDIS_PORT)
+try:
+    redis_client.get(None)  # getting None returns None or throws an exception
+except (redis.exceptions.ConnectionError, 
+        redis.exceptions.BusyLoadingError):
+    print 'monitor.py redis connection Failed'
+    exit(1)
+print 'monitor.py redis connection success'
+
+
 cloudAMQP_client = CloudAMQPClient(SCRAPE_NEWS_TASK_QUEUE_URL, SCRAPE_NEWS_TASK_QUEUE_NAME)
 
 while True:

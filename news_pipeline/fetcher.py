@@ -11,7 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scrapers'))
 
 # import scraper
-import cnn
+import scraper
 
 from cloudAMQP_client import CloudAMQPClient
 
@@ -36,16 +36,25 @@ def handle_message(msg):
         return
 
     task = msg
+    source = task['source']
+    source_url = task['url']
+    article_text = ""
 
-    article = Article(task['url'])
-    article.download()
-    article.parse()
-
-    print article.text
-
-    task['text'] = article.text
-
-    dedupe_news_queue_client.sendMessage(task)
+    if(source == "cnn" or source == "ew" or source == "espn"):
+        print "#### CUSTOM SCRAPER: URL:%s, SOURCE:%s ..." % (source_url, source)
+        article_text = scraper.extract_news(source_url, source)
+    else:
+        article = Article(source_url)
+        article.download()
+        print "#### NEWSPAPER SCRAPER: URL:%s ..." % source_url
+        article.parse()
+        article_text = article.text
+    
+    if article_text:
+        task['text'] = article_text
+        dedupe_news_queue_client.sendMessage(task)
+    else:
+        print "#### SCRAPER cannot fetcher article at URL:%s" % source_url
 
 while True:
     # fetch msg from queue

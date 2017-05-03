@@ -1,0 +1,20 @@
+news_pipeline:
+  image: zjsth92/news_pipeline
+  command: ["/bin/bash", "/news_pipeline/start.sh"]
+  links:
+    - "cache:redis"
+    - "db:mongodb"
+  environment:
+    - MONGODB_USER=cs503
+    - MONGODB_PASS=cs503_tap_news
+db:
+  image: tutum/mongodb
+  ports: 
+    - 28017:28017
+    - 27017:27017
+  environment:
+    - MONGODB_USER=cs503
+    - MONGODB_DATABASE=tap-news-sth
+    - MONGODB_PASS=cs503_tap_news
+cache:
+  image: redis

@@ -21,7 +21,7 @@ from cloudAMQP_client import CloudAMQPClient
 DEDUPE_NEWS_TASK_QUEUE_URL = config["amqp"]["dedupe"]["url"]
 DEDUPE_NEWS_TASK_QUEUE_NAME = config["amqp"]["dedupe"]["name"]
 
-SLEEP_TIME_IN_SECONDS = 5
+SLEEP_TIME_IN_SECONDS = 1
 
 NEWS_TABLE_NAME = config["mongodb"]["news_table"]
 
