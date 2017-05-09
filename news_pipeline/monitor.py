@@ -1,31 +1,30 @@
 # -*- coding: utf-8 -*-
-
-import datetime
-import hashlib
 import os
-import redis
 import sys
-import json
+import yaml
+import redis
+import hashlib
+import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 
 import news_api_client
 from cloudAMQP_client import CloudAMQPClient
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
 
 REDIS_HOST = config["redis"]["host"]
 REDIS_PORT = config["redis"]["port"]
 
-NEWS_TIME_OUT_IN_SECONDS = config["news_timeout"]
-SLEEP_TIME_IN_SECOUNDS = config["sleepTime"]
+NEWS_TIME_OUT_IN_SECONDS = config["news_pipeline"]["monitor"]["news_timeout_in_seconds"]
+SLEEP_TIME_IN_SECOUNDS = config["news_pipeline"]["monitor"]["sleep_in_seconds"]
 
 # Use your own Cloud AMQP queue
 SCRAPE_NEWS_TASK_QUEUE_URL = config["amqp"]["scrape"]["url"]
 SCRAPE_NEWS_TASK_QUEUE_NAME = config["amqp"]["scrape"]["name"]
 
-NEWS_SOURCES = [source.encode('ascii') for source in config["newsApi"]["sources"]]
+NEWS_SOURCES = [source.encode('ascii') for source in config["news_api"]["sources"]]
 
 print 'monitor.py try to connect redis at %s:%d' % (REDIS_HOST, REDIS_PORT)
 redis_client = redis.StrictRedis(REDIS_HOST, REDIS_PORT)
@@ -44,10 +43,11 @@ while True:
     print "start monitor"
     print NEWS_SOURCES
     news_list = news_api_client.getNewsFromSource(NEWS_SOURCES)
-    print ("get news %d", len(news_list))
+    print "Get news %d" % len(news_list)
     num_of_new_news = 0
 
     for news in news_list:
+        
         news_digest = hashlib.md5(news['title'].encode('utf-8')).digest().encode('base64')
 
         if redis_client.get(news_digest) is None:

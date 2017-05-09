@@ -1,17 +1,86 @@
+news_api:
+  endpoint: "https://newsapi.org/v1/"
+  key: "db427890f16c447f8d95182a2db5d3f4"
+  sources:
+    - bbc-news
+    - bbc-sport
+    - bloomberg
+    - cnn
+    - entertainment-weekly
+    - espn
+    - ign
+    - techcrunch
+    - the-new-york-times
+    - the-wall-street-journal
+    - the-washington-post
+
 backend_server:
 web_server:
+
 news_pipeline:
+  deduper:
+    same_news_similarity_threshold: 0.9
+    sleep_in_seconds: 1
+
+  fetcher:
+    sleep_in_seconds: 5
+    custom_scraper_sources:
+      - cnn
+      - ew
+      - espn
+
+  monitor:
+    news_timeout_in_seconds: 86400
+    sleep_in_seconds: 10
+
+  scraper:
+    # "cnn"
+    cnn:
+      xpath: '//p[@class="zn-body__paragraph"]//text() | //div[@class="zn-body__paragraph"]//text()'
+    # "entertainment-weekly"
+    ew:
+      xpath: '//div[@class="article-body__inner"]//text()'
+    # "espn"
+    espn:
+      xpath: "//div[@class='article-body']//text()"
+  
+
 news_recommendation_service:
+  host: "0.0.0.0"
+  port: 5050
+  
 news_topic_modeling_service:
+  trainer:
+    model_dir: '../model'
+    vars_dir: '../model/vars'
+    vocab_procesor_save_file: '../model/vocab_procesor_save_file'
+    classifier_step: 100
+    embedding_size: 40
+    window_size: 10
+    pooling_window: 4
+    pooling_stride: 2
+    learning_rate: 0.05
+    n_filters: 10
+
+  server:
+    host: "0.0.0.0"
+    port: 6060
+    max_doc_len: 500
+    model_update_lag: 10
+
+
 mongodb:
-  host:  "0.0.0.0"
-  port: ${MONGODB_PORT:27017}
+  host:  "mongodb"
+  port: 27017
   db_name: tap-news-sth
   news_table: news
   click_log_table: click_logs
+  preference_model_table: user_preference_model
+
 redis:
-  host: '0.0.0.0'
+  host: 'redis'
   port: 6379
+
 amqp:
   socket_timeout: 3
   dedupe:

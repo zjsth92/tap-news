@@ -1,0 +1,15 @@
+test:
+  sources:
+    - cnn
+    - ew
+    - espn
+  cnn:
+    url: "http://edition.cnn.com/2017/01/17/us/fort-lauderdale-shooter-isis-claim/index.html"
+    expected_str: "the man charged with killing five people at the Fort Lauderdale airport"
+  ew:
+    url: "http://ew.com/tv/2017/05/03/agents-shield-framework-exit-spoilers/"
+    expected_str: "Though there were a few close calls, the team escaped the Framework during Tuesday’s episode of Marvel’s Agents of S.H.I.E.L.D. — but not everyone decided to head back to reality."
+  espn:
+    url: "http://www.espn.com/blog/sweetspot/post/_/id/79200/real-or-not-red-sox-crossed-the-line-in-throwing-at-manny-machado"
+    expected_str: "Instead of talking about Chris Sale's dominant performance"
+

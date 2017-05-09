@@ -1,9 +1,9 @@
 import os
 import sys
-import json
+import yaml
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
 
 # import common package in parent directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
@@ -25,4 +25,4 @@ if __name__ == '__main__':
             title = news['title']
             topic = news_topic_modeling_service_client.classify(title)
             news['class'] = topic
-            db['news'].replace_one({'digest': news['digest']}, news, upsert=True)
+            db[NEWS_TABLE_NAME].replace_one({'digest': news['digest']}, news, upsert=True)

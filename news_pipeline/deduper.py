@@ -1,31 +1,29 @@
 # -*- coding: utf-8 -*-
-
-import datetime
 import os
 import sys
-import json
+import yaml
+import datetime
 
 from dateutil import parser
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
-
 # import common package in parent directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-
 import mongodb_client
 from cloudAMQP_client import CloudAMQPClient
+
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
 
 # Use your own Cloud AMQP queue
 DEDUPE_NEWS_TASK_QUEUE_URL = config["amqp"]["dedupe"]["url"]
 DEDUPE_NEWS_TASK_QUEUE_NAME = config["amqp"]["dedupe"]["name"]
 
-SLEEP_TIME_IN_SECONDS = 1
+SLEEP_TIME_IN_SECONDS = config["news_pipeline"]["deduper"]["sleep_in_seconds"]
 
 NEWS_TABLE_NAME = config["mongodb"]["news_table"]
 
-SAME_NEWS_SIMILARITY_THRESHOLD = 0.9
+SAME_NEWS_SIMILARITY_THRESHOLD = config["news_pipeline"]["deduper"]["same_news_similarity_threshold"]
 
 cloudAMQP_client = CloudAMQPClient(DEDUPE_NEWS_TASK_QUEUE_URL, DEDUPE_NEWS_TASK_QUEUE_NAME)
 
@@ -53,7 +51,7 @@ def handle_message(msg):
         tfidf = TfidfVectorizer().fit_transform(documents)
         pairwise_sim = tfidf * tfidf.T
 
-        print pairwise_sim.A
+        # print pairwise_sim.A
 
         rows, _ = pairwise_sim.shape
 
