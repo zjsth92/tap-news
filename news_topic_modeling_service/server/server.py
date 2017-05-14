@@ -7,10 +7,17 @@ import pyjsonrpc
 import sys
 import tensorflow as tf
 import time
+import yaml
+import nltk
+import string
 
 from tensorflow.contrib.learn.python.learn.estimators import model_fn
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+
+with open(os.path.join(os.path.dirname(__file__), '../..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
+    model_config = config["news_topic_modeling_service"]
 
 # import packages in trainer
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'trainer'))
@@ -18,8 +25,8 @@ import news_cnn_model
 
 learn = tf.contrib.learn
 
-SERVER_HOST = 'localhost'
-SERVER_PORT = 6060
+SERVER_HOST = model_config["server"]["host"]
+SERVER_PORT = model_config["server"]["port"]
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), '..', 'model')
 MODEL_UPDATE_LAG_IN_SECONDS = 10
@@ -35,6 +42,29 @@ MAX_DOCUMENT_LENGTH = 500
 vocab_processor = None
 
 classifier = None
+
+replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
+porter = nltk.stem.porter.PorterStemmer()
+stopwords = set(nltk.corpus.stopwords.words("english"))
+
+def tokenize_and_stem(iterator):
+    result = []
+    for text in iterator:
+        if type(text) != str:
+            print "UNKNOW text with type %s, Skip\n" % type(text)
+            result.append([])
+            continue
+        # print "type: %s, text: %s" %(type(text), text)
+        text = text.lower()
+        text = text.translate(replace_punctuation)
+        tokens = nltk.word_tokenize(text)
+        filtered_token = [word for word in tokens if word not in stopwords]
+        stem = [porter.stem(item) for item in filtered_token]
+        # print "\n####### STEM #######"
+        # print stem
+        result.append(stem)
+
+    return result
 
 def restoreVars():
     with open(VARS_FILE, 'r') as f:

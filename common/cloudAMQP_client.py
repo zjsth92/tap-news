@@ -1,9 +1,10 @@
 import os
 import json
+import yaml
 import pika
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
 
 class CloudAMQPClient:
 

@@ -98,7 +98,7 @@ def main(unused_argv):
 
     # Evaluate model
     y_predicted = [
-        p['class'] for p in classifier.predict(x_test, as_iterable=True)
+        p['class'] for p in classifier.predict(x_test,as_iterable=True)
     ]
 
     score = metrics.accuracy_score(y_test, y_predicted)

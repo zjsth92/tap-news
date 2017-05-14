@@ -1,16 +1,16 @@
 import os
 import sys
-import json
+import yaml
 from sets import Set
 
 import operations
 
 
 # import common package in parent directory
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'common'))
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '../..', 'config.yaml')) as config_file:
+    config = yaml.load(config_file)
 
 
 import mongodb_client

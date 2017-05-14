@@ -1,12 +1,15 @@
 import './NewsPanel.css';
 import React from 'react';
+import Auth from '../Auth/Auth';
 import NewsCard from '../NewsCard/NewsCard'
+import config from 'web_server_config'
+
 
 export default class NewPanel extends React.Component {
 
     constructor() {
         super();
-        this.state = { "news": null };
+        this.state = {news:null, pageNum:1, totalPages:1, loadedAll:false};
     }
 
     componentDidMount() {
@@ -31,22 +34,23 @@ export default class NewPanel extends React.Component {
     }
 
     loadMoreNews() {
-        const port = "4000";
-        const host = "localhost"
-        const endpoint = `http://${host}:${port}/news`;
+        const endpoint = `${config.load_more_news_endpoint}/userId/${Auth.getEmail()}/pageNum/${this.state.pageNum}`;
         let request = new Request(endpoint, {
             method: 'GET',
+            headers: {
+                'Authorization': 'bearer ' + Auth.getToken(),
+            },
             cache: false
         });
 
         fetch(request)
             .then(res => res.json())
             .then((news) => {
-                console.log("get news: " + news);
+                console.log(news);
                 this.setState({
                     "news": this.state.news ? this.state.news.concat(news) : news
                 })
-            }).catch(err => console.error(err))
+            }).catch(err => console.error)
     }
 
     render() {

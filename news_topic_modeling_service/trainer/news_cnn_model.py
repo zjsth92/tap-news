@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-EMBEDDING_SIZE = 40
+EMBEDDING_SIZE = 100
 N_FILTERS = 10
 WINDOW_SIZE = 20
 FILTER_SHAPE1 = [WINDOW_SIZE, EMBEDDING_SIZE]
@@ -11,6 +11,8 @@ POOLING_STRIDE = 2
 LEARNING_RATE = 0.05
 
 def generate_cnn_model(n_classes, n_words):
+    # FILTER_SHAPE1 = [n_words, EMBEDDING_SIZE]
+    # FILTER_SHAPE2 = [n_words, N_FILTERS]
     """2 layer ConvNet to predict from sequence of words to a class."""
     def cnn_model(features, target):
       # Convert indexes of words into embeddings.
@@ -24,8 +26,7 @@ def generate_cnn_model(n_classes, n_words):
       word_vectors = tf.expand_dims(word_vectors, 3)
       with tf.variable_scope('CNN_layer1'):
         # Apply Convolution filtering on input sequence.
-        conv1 = tf.contrib.layers.convolution2d(
-            word_vectors, N_FILTERS, FILTER_SHAPE1, padding='VALID')
+        conv1 = tf.contrib.layers.convolution2d(word_vectors, N_FILTERS, FILTER_SHAPE1, padding='VALID')
         # Add a RELU for non linearity.
         conv1 = tf.nn.relu(conv1)
         # Max pooling across output of Convolution+Relu.
@@ -38,14 +39,17 @@ def generate_cnn_model(n_classes, n_words):
         pool1 = tf.transpose(pool1, [0, 1, 3, 2])
       with tf.variable_scope('CNN_layer2'):
         # Second level of convolution filtering.
-        conv2 = tf.contrib.layers.convolution2d(
-            pool1, N_FILTERS, FILTER_SHAPE2, padding='VALID')
+        # conv2 = tf.contrib.layers.convolution2d(
+        #     pool1, N_FILTERS, FILTER_SHAPE2, padding='VALID')
+        conv2 = tf.contrib.layers.convolution2d(pool1, N_FILTERS, FILTER_SHAPE2, padding='VALID')
         # Max across each filter to get useful features for classification.
         pool2 = tf.squeeze(tf.reduce_max(conv2, 1), squeeze_dims=[1])
 
       # Apply regular WX + B and classification.
       logits = tf.contrib.layers.fully_connected(pool2, n_classes, activation_fn=None)
       loss = tf.contrib.losses.softmax_cross_entropy(logits, target)
+
+    #   saver.save(session, LOG_DIR/model.ckpt, step).
 
       train_op = tf.contrib.layers.optimize_loss(
           loss,

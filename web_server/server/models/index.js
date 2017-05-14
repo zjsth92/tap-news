@@ -10,4 +10,6 @@ module.exports.connect = (uri) => {
 
   // load models
   require('./user');
+  require('./serviceManager');
+  require('./serviceChildInfo');
 };

@@ -4,16 +4,16 @@ import sys
 import pickle
 import random
 import redis
-
+import yaml
 
 from bson.json_util import dumps
 from datetime import datetime
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '../..', 'config.yaml')) as config_file:    
+    config = yaml.load(config_file)
 
 # import common package in parent directory
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'common'))
 
 import mongodb_client
 import news_recommendation_service_client

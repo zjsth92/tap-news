@@ -6,10 +6,10 @@ import pyjsonrpc
 with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
     config = yaml.load(config_file)
 
-RECOMMENDATION_SERVER_HOST = config["news_topic_modeling_service"]["host"]
-RECOMMENDATION_SERVER_PORT = config["news_topic_modeling_service"]["port"]
+TOPIC_MODELING_SERVER_HOST = config["news_topic_modeling_service"]["server"]["host"]
+TOPIC_MODELING_SERVER_PORT = config["news_topic_modeling_service"]["server"]["port"]
 
-URL = 'http://%s:%d' % (RECOMMENDATION_SERVER_HOST,RECOMMENDATION_SERVER_PORT)
+URL = 'http://%s:%d' % (TOPIC_MODELING_SERVER_HOST,TOPIC_MODELING_SERVER_PORT)
 
 client = pyjsonrpc.HttpClient(url=URL)
 

@@ -17,4 +17,21 @@ services.add = function add(a, b, callback) {
     });
 }
 
+// Get news summaries for a user
+services.getNewsSummariesForUser = function getNewsSummariesForUser(user_id, page_num, callback) {
+    client.request('getNewsSummariesForUser', [user_id, page_num], function(err, error, response) {
+        if (err) throw err;
+        console.log(response);
+        callback(response);
+    });
+}
+
+// Log a news click event for a user
+services.logNewsClickForUser = function logNewsClickForUser(user_id, news_id) {
+    client.request('logNewsClickForUser', [user_id, news_id], function(err, error, response) {
+        if (err) throw err;
+        console.log(response);
+    });
+}
+
 module.exports = services;

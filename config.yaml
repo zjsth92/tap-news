@@ -14,8 +14,12 @@ news_api:
     - the-wall-street-journal
     - the-washington-post
 
-backend_server:
+
 web_server:
+  backend_server:
+    host: 'localhost'
+    port: 4040
+  load_more_news_endpoint: "http://localhost:4000/news"
 
 news_pipeline:
   deduper:
@@ -46,7 +50,7 @@ news_pipeline:
   
 
 news_recommendation_service:
-  host: "0.0.0.0"
+  host: "localhost"
   port: 5050
   
 news_topic_modeling_service:
@@ -54,7 +58,7 @@ news_topic_modeling_service:
     model_dir: '../model'
     vars_dir: '../model/vars'
     vocab_procesor_save_file: '../model/vocab_procesor_save_file'
-    classifier_step: 100
+    classifier_step: 200
     embedding_size: 40
     window_size: 10
     pooling_window: 4
@@ -70,7 +74,7 @@ news_topic_modeling_service:
 
 
 mongodb:
-  host:  "mongodb"
+  host:  "localhost" #mongodb
   port: 27017
   db_name: tap-news-sth
   news_table: news
@@ -78,7 +82,7 @@ mongodb:
   preference_model_table: user_preference_model
 
 redis:
-  host: 'redis'
+  host: 'localhost' #redis
   port: 6379
 
 amqp:

@@ -1,11 +1,11 @@
 import os
-import json
+import yaml
 import requests
 
 from json import loads
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
     config = config["newsApi"]
 
 NEWS_API_ENDPOINT = config["endpoint"]

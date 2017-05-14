@@ -1,13 +1,13 @@
-import json
+import yaml
 import os
 import sys
 import pyjsonrpc
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', "config.yaml"), 'r') as config_file:
+    config = yaml.load(config_file)
 
-RECOMMENDATION_SERVER_HOST = config["recommendation_service"]["host"]
-RECOMMENDATION_SERVER_PORT = config["recommendation_service"]["port"]
+RECOMMENDATION_SERVER_HOST = config["news_recommendation_service"]["host"]
+RECOMMENDATION_SERVER_PORT = config["news_recommendation_service"]["port"]
 
 URL = 'http://%s:%d' % (RECOMMENDATION_SERVER_HOST,RECOMMENDATION_SERVER_PORT)
 

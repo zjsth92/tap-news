@@ -7,6 +7,16 @@ news_pipeline:
   environment:
     - MONGODB_USER=cs503
     - MONGODB_PASS=cs503_tap_news
+
+backend_server:
+  image: zjsth92/backend_server
+  links:
+    - "cache:redis"
+    - "db:mongodb"
+  environment:
+    - MONGODB_USER=cs503
+    - MONGODB_PASS=cs503_tap_news
+
 db:
   image: tutum/mongodb
   ports: 
@@ -18,3 +28,5 @@ db:
     - MONGODB_PASS=cs503_tap_news
 cache:
   image: redis
+  ports: 
+    - 6379:6379

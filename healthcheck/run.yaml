@@ -1,0 +1,9 @@
+name: my-cluster
+endpoint: http://localhost:4000
+python:
+  - 
+    path: ../news_recommendation_service/recommendation_service.py
+    name: recommendation_service
+  - 
+    path: ../news_topic_modeling_service/server/server.py
+    name: news_topic_modeling_service

@@ -2,6 +2,8 @@ import Base from './Base/Base';
 import App from './App/App';
 import LoginPage from './Login/LoginPage';
 import SignUpPage from './SignUp/SignUpPage';
+import ConsolePage from './Console/ConsolePage'
+import ManagerDetailPage from './ManagerDetail/ManagerDetailPage'
 import Auth from './Auth/Auth';
 
 
@@ -30,7 +32,14 @@ const routes = {
       path: '/signup',
       component: SignUpPage
     },
-
+    {
+      path: '/console',
+      component: ConsolePage
+    },
+    {
+      path: '/console/managers/:pid',
+      component: ManagerDetailPage
+    },
     {
       path: '/logout',
       onEnter: (nextState, replace) => {

@@ -20,9 +20,10 @@ if __name__ == '__main__':
     for news in cursor:
         count += 1
         print count
+        print news
         if 'class' in news:
             print 'Populating classes...'
-            title = news['title']
-            topic = news_topic_modeling_service_client.classify(title)
+            text = news['title']
+            topic = news_topic_modeling_service_client.classify(text)
             news['class'] = topic
             db[NEWS_TABLE_NAME].replace_one({'digest': news['digest']}, news, upsert=True)

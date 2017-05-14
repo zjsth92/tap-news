@@ -2,20 +2,20 @@ import operator
 import os
 import pyjsonrpc
 import sys
-import json
+import yaml
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'config.json')) as config_file:    
-    config = json.load(config_file)
+with open(os.path.join(os.path.dirname(__file__), '..', 'config.yaml')) as config_file:    
+    config = yaml.load(config_file)
 
 # import common package in parent directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 
 import mongodb_client
 
-PREFERENCE_MODEL_TABLE_NAME = config["recommendation_service"]["preference_model_table"]
+PREFERENCE_MODEL_TABLE_NAME = config["mongodb"]["preference_model_table"]
 
-SERVER_HOST = config["recommendation_service"]["host"]
-SERVER_PORT = config["recommendation_service"]["port"]
+SERVER_HOST = config["news_recommendation_service"]["host"]
+SERVER_PORT = config["news_recommendation_service"]["port"]
 
 # Ref: https://www.python.org/dev/peps/pep-0485/#proposed-implementation
 # Ref: http://stackoverflow.com/questions/5595425/what-is-the-best-way-to-compare-floats-for-almost-equality-in-python

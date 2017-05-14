@@ -9,4 +9,4 @@ pika
 numpy
 scipy
 pyyaml
-simhash
+nltk
